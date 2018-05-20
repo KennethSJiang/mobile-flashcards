@@ -6,19 +6,20 @@ import DeckSummary from './DeckSummary'
 import TextButton from './TextButton'
 
 class DeckDetail extends Component{
-
-  //Overwrite navigation header option
   static navigationOptions = ({navigation}) => {
-    console.log("KENNETH I got called!")
-      const {deck} = navigation.state.params
+      const {deckName} = navigation.state.params
       return{
-        title: deck.title
+        title: deckName
       }
   }
 
   _addCard = (deckId) => {
+    const {navigation} = this.props
     console.log("_addcard has been called on " + deckId)
-
+    navigation.navigate(
+      "NewCard",
+      { deckId }
+    )
   }
 
   _startQuiz = (deck) => {
@@ -68,10 +69,10 @@ const styles = StyleSheet.create({
     }
 })
 
-function mapStateToProps(state, {navigation}){
-  const {deck} = navigation.state.params
+function mapStateToProps({decks}, {navigation}){
+  const { deckId, deckName } = navigation.state.params
   return{
-    deck
+    deck: decks[deckId]
   }
 }
 

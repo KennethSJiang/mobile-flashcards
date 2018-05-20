@@ -18,10 +18,9 @@ class DeckList extends Component{
 
   _pressDeckContainer = (item) => {
     const { navigation } = this.props
-    console.log("Deck Summary has been pressed. with item " + JSON.stringify(item))
     navigation.navigate(
       'DeckDetail',
-      { deck: item }
+      { deckId: item.key, deckName: item.title }
     )
   }
 
@@ -37,7 +36,7 @@ class DeckList extends Component{
 
   render(){
     const { decks } = this.props
-    console.log("KENNNNETH decks is " + JSON.stringify(decks))
+
     if(decks){
       return(
         <View style={styles.container} >
@@ -60,7 +59,6 @@ function mapDispatchToProps(dispatch){
 }
 
 function mapStateToProps({decks}){
-  console.log("KENNNNETH decks is " + JSON.stringify(decks))
   const newDecks = Object.keys(decks).map((key)=>{
       const deck = decks[key]
       deck.key = key

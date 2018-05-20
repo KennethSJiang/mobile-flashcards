@@ -9,6 +9,7 @@ import { purple } from './utils/colors'
 import DeckSummary from './components/DeckSummary'
 import DeckDetail from './components/DeckDetail'
 import NewDeck from './components/NewDeck'
+import NewCard from './components/NewCard'
 import { white, darkGray } from './utils/colors'
 import {TabNavigator, StackNavigator, DrawerNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation'
 import {FontAwesome, Ionicons} from '@expo/vector-icons'
@@ -72,6 +73,24 @@ const MainNavigator = createStackNavigator({
   DeckDetail: {
     screen: DeckDetail,
     navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: darkGray,
+        height: 40,
+        marginTop: -30,
+      },
+      headerTitleStyle:{
+        fontSize: 20,
+        marginBottom: 5,
+        alignSelf: 'center',
+        textAlign: 'center',
+      }
+    }
+  },
+  NewCard: {
+    screen: NewCard,
+    navigationOptions: {
+      title: 'Add Card',
       headerTintColor: white,
       headerStyle: {
         backgroundColor: darkGray,

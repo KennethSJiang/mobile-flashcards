@@ -3,7 +3,6 @@ import { Text, View, StyleSheet } from 'react-native'
 import { gray, white, darkGray, lightGray } from '../utils/colors'
 
 const DeckSummary = ({deck}) => {
-  console.log("Rendering deck summary")
   return (
     <View style={styles.container}>
       <Text style={styles.deckTitle}>

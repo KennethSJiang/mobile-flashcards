@@ -10,22 +10,37 @@ export function getDeck(id){
   return AsyncStorage.getItem(QUESTIONS_KEY).then(_parseJson)
 }
 
-export function saveDeckTitle(title){
+export function createNewDeck(id, title){
   return AsyncStorage.mergeItem(QUESTIONS_KEY, JSON.stringify(
     {
-      [title]: title,
-      questions: []
-    }))
+      [id]: {
+        title: title,
+        questions: []
+      }
+    })).then(() => {
+      getDecks().then((data)=>{
+        console.log("API[createNewDeck] >>>>>>>>>>>>>>>>>" + JSON.stringify(data))
+      })
+    })
 }
 
-export function addCardToDeck(title, card){
+export function addCardToDeck(deckId, card){
   return getDecks().then((decks) => {
-    const deck = decks[title]
+    const deck = decks[deckId]
     if(deck){
-      deck.questions.concat([card])
-      decks[title] = deck
-      AsyncStorage.saveItem(QUESTIONS_KEY, decks)
+      const newDecks = {
+        ...decks,
+        [deckId]: {
+          ...decks[deckId],
+          questions: [...decks[deckId].questions.concat([card])]
+        }
+      }
+      AsyncStorage.setItem(QUESTIONS_KEY, JSON.stringify(newDecks))
     }
+  }).then(() => {
+    getDecks().then((data)=>{
+      console.log("API[addCardToDeck] >>>>>>>>>>>>>>>>>" + JSON.stringify(data))
+    })
   })
 }
 
@@ -46,40 +61,5 @@ export const _DATA = {
         answer: 'The componentDidMount lifecycle event'
       }
     ]
-  },
-  JavaScript: {
-    title: 'JavaScript',
-    questions: [
-      {
-        question: 'What is a closure?',
-        answer: 'The combination of a function and the lexical environment within which that function was declared.'
-      }
-    ]
-  },
-  ReactNative: {
-    title: 'ReactNative',
-    questions: [
-      {
-        question: 'What is React Native?',
-        answer: 'A library for managing user interfaces'
-      },
-      {
-        question: 'Where do you make Ajax requests in React?',
-        answer: 'The componentDidMount lifecycle event'
-      }
-    ]
-  },
-  Money: {
-    title: 'Money and Banking',
-    questions: [
-      {
-        question: 'What is Money?',
-        answer: 'Good stuff'
-      },
-      {
-        question: 'Where do you make Ajax requests in React?',
-        answer: 'The componentDidMount lifecycle event'
-      }
-    ]
-  },
+  }
 }
