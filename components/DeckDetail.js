@@ -14,16 +14,15 @@ class DeckDetail extends Component{
   }
 
   _addCard = (deckId) => {
-    const {navigation} = this.props
+    const { toNewCard } = this.props
     console.log("_addcard has been called on " + deckId)
-    navigation.navigate(
-      "NewCard",
-      { deckId }
-    )
+    toNewCard(deckId)
   }
 
-  _startQuiz = (deck) => {
-    console.log("_startQuiz has been called on " + deck.key)
+  _startQuiz = (deckId) => {
+    const { toQuiz } = this.props
+    console.log("_startQuiz has been called on " + deckId)
+    toQuiz(deckId)
   }
 
   render(){
@@ -37,7 +36,7 @@ class DeckDetail extends Component{
           {deck.questions.length} cards
         </Text>
         <TextButton style={styles.textButton} onPress={()=>this._addCard(deck.key)}>Add Card</TextButton>
-        <TextButton style={[styles.textButton, {backgroundColor: lightGray}]} onPress={()=>this._startQuiz(deck)}>Start Quiz</TextButton>
+        <TextButton style={[styles.textButton, {backgroundColor: lightGray}]} onPress={()=>this._startQuiz(deck.key)}>Start Quiz</TextButton>
       </View>
     )
   }
@@ -76,4 +75,17 @@ function mapStateToProps({decks}, {navigation}){
   }
 }
 
-export default connect(mapStateToProps)(DeckDetail)
+function mapDispatchToProps(dispatch, {navigation}){
+  return{
+    toNewCard: (deckId) => navigation.navigate(
+      "NewCard",
+      { deckId }
+    ),
+    toQuiz: (deckId) => navigation.navigate(
+      "Quiz",
+      { deckId }
+    )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeckDetail)

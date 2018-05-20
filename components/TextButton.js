@@ -19,6 +19,7 @@ const styles= StyleSheet.create({
     borderWidth: 1,
     paddingTop: 20,
     paddingBottom: 20,
-    borderColor: darkGray
+    borderColor: darkGray,
+    overflow: 'hidden'
   }
 })
