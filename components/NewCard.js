@@ -2,46 +2,65 @@ import React, {Component} from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import TextButton from './TextButton'
-import { gray, lightGray, white } from '../utils/colors'
+import { gray, lightGray, white, red } from '../utils/colors'
 import { addCardToDeck } from '../utils/api'
 import { addCard } from '../actions/decks'
 
 class NewCard extends Component {
   state = {
       question: '',
-      answer: ''
+      answer: '',
+      error: '',
   }
-  
+
   _submit = ()=>{
     const { deckId, addCard, goBack } = this.props
     const {question, answer} = this.state
-    addCardToDeck(deckId, {question, answer})
-      .then(()=> {
-        addCard(deckId, {question, answer})
-        goBack()
-      })
+    if(question.trim().length <= 0 || answer.trim().length <= 0 ){
+      this.setState({error: 'Question and answer cannot be empty!'})
+    } else {
+      this.setState({hasError: ''})
+      addCardToDeck(deckId, {question, answer})
+        .then(()=> {
+          addCard(deckId, {question, answer})
+          goBack()
+        })
+    }
+  }
+
+  _showError(){
+    const { error } = this.state
+    return error.length > 0 && (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {error}
+        </Text>
+      </View>
+    )
   }
 
   render(){
+    const { question, answer } = this.state
     return(
       <View>
         <TextInput
           style={styles.textInputContainer}
           onChangeText={(question) => this.setState({question})}
-          value={this.state.question}
+          value={question}
           placeholder='Type your question here'
           placeholderTextColor={gray}
         />
         <TextInput
           style={[styles.textInputContainer, {marginTop: 30}]}
           onChangeText={(answer) => this.setState({answer})}
-          value={this.state.answer}
+          value={answer}
           placeholder='Type your answer here'
           placeholderTextColor={gray}
         />
         <TextButton style={styles.textBtn} onPress={()=>this._submit()}>
           Submit
         </TextButton>
+        { this._showError() }
       </View>
     )
   }
@@ -56,8 +75,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 20,
-    marginBottom: 20,
     padding: 5
+  },
+  errorContainer: {
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  errorText: {
+    color: red,
+    fontSize: 20,
   },
   textBtn:{
     width: 150,

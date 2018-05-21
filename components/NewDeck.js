@@ -1,26 +1,46 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import TextButton from './TextButton'
-import { gray, lightGray } from '../utils/colors'
+import { gray, lightGray, red } from '../utils/colors'
 import { createNewDeck } from '../utils/api'
 import { connect } from 'react-redux'
 import { addDeck } from '../actions/decks'
 
 class NewDeck extends Component{
   state={
-    deckTitle: ''
+    deckTitle: '',
+    error: '',
+  }
+
+  _showError(){
+    const { error } = this.state
+    return error.length > 0 && (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>
+          {error}
+        </Text>
+      </View>
+    )
   }
 
   _submit(){
-    const { addNewDeck, toDeckDetail, replaceNavStack } = this.props
+    const { deckIds, addNewDeck, toDeckDetail, replaceNavStack } = this.props
     const { deckTitle } = this.state
     const deckId = deckTitle.replace(/\s/g, "_")
-    createNewDeck(deckId, deckTitle)
-      .then(() => {
-        addNewDeck(deckId, deckTitle)
-        replaceNavStack()
-        toDeckDetail(deckId, deckTitle)
-      })
+
+    if(deckId.trim().length <= 0){
+      this.setState({error: 'Name cannot be empty!'})
+    } else if(deckIds.includes(deckId)){
+      this.setState({ error: 'Deck has already exist. Choose another name.'})
+    } else {
+      this.setState({ error: '' })
+      createNewDeck(deckId, deckTitle)
+        .then(() => {
+          addNewDeck(deckId, deckTitle)
+          replaceNavStack()
+          toDeckDetail(deckId, deckTitle)
+        })
+    }
   }
 
   render(){
@@ -39,6 +59,7 @@ class NewDeck extends Component{
         <TextButton style={styles.textBtn} onPress={()=>this._submit()}>
           Submit
         </TextButton>
+        { this._showError() }
       </View>
     )
   }
@@ -71,7 +92,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: lightGray,
     alignSelf: 'center'
-  }
+  },
+  errorContainer: {
+    margin: 10,
+    alignSelf: 'center',
+  },
+  errorText: {
+    color: red,
+    fontSize: 20,
+  },
 })
 
 function mapDispatchToProps(dispatch, {navigation}){
@@ -85,4 +114,10 @@ function mapDispatchToProps(dispatch, {navigation}){
   }
 }
 
-export default connect(null, mapDispatchToProps)(NewDeck)
+function mapStateToProps({ decks }, { navigation }){
+  return {
+    deckIds: Object.keys(decks)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewDeck)
