@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet } from 'react-native'
-import { red, white, green, gray } from '../utils/colors'
+import { red, white, green, gray, lightGray } from '../utils/colors'
 import TextButton from './TextButton'
 
 class Quiz extends Component{
@@ -32,6 +32,15 @@ class Quiz extends Component{
     this.setState((prevState) => ({
       showQuestion: !prevState.showQuestion
     }))
+  }
+
+  _restart = ()=>{
+    this.setState({
+      answerCorrect: 0,
+      answerWrong: 0,
+      currentQIndex: 0,
+      showQuestion: true,
+    })
   }
 
   _goBack = ()=>{
@@ -79,20 +88,27 @@ class Quiz extends Component{
             </Text>
           </View>
           <TextButton
-            style={[styles.textButton, {width: 200, marginTop: 40}]}
+            style={[styles.textButton, {width: 200, marginTop: 40, backgroundColor: lightGray}]}
+            onPress={() => this._restart()}
+          >
+            Restart Quiz
+          </TextButton>
+          <TextButton
+            style={[styles.textButton, {width: 200, marginTop: 10}]}
             onPress={() => this._goBack()}
           >
-            Back to Home
+            Back to Deck
           </TextButton>
         </View>
       )
     } else {
       const { question, answer } = questions[currentQIndex]
+      const questionPoolSize = questions ? questions.length : 0
       return(
         <View style={styles.container}>
           <View style={styles.tracker}>
             <Text style={styles.trackerText}>
-              {answerWrong + answerCorrect}/{questions ? questions.length : 0}
+              {questionPoolSize === 0 ? 0 : questionPoolSize - answerWrong - answerCorrect} / {questionPoolSize}
             </Text>
           </View>
           <View style={styles.question}>
