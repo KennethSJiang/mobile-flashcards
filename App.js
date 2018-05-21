@@ -11,8 +11,8 @@ import DeckDetail from './components/DeckDetail'
 import NewDeck from './components/NewDeck'
 import NewCard from './components/NewCard'
 import Quiz from './components/Quiz'
-import { white, darkGray } from './utils/colors'
-import {TabNavigator, StackNavigator, DrawerNavigator, createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation'
+import { white, darkGray, black } from './utils/colors'
+import {createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation'
 import {FontAwesome, Ionicons} from '@expo/vector-icons'
 import {resetLocalNotification} from './utils/helpers'
 
@@ -77,7 +77,7 @@ const MainNavigator = createStackNavigator({
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: darkGray,
+        backgroundColor: black,
         height: 40,
         marginTop: -20,
       },
@@ -95,7 +95,7 @@ const MainNavigator = createStackNavigator({
       title: 'Add Card',
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: darkGray,
+        backgroundColor: black,
         height: 40,
         marginTop: -20,
       },
@@ -113,7 +113,7 @@ const MainNavigator = createStackNavigator({
       title: 'Quiz',
       headerTintColor: white,
       headerStyle: {
-        backgroundColor: darkGray,
+        backgroundColor: black,
         height: 40,
         marginTop: -20,
       },
