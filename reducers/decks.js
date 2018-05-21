@@ -17,13 +17,10 @@ function decks(state={}, action){
         }
       }
     case ADD_DECK:
-      console.log("ADD_DECK [old] ------ " + JSON.stringify(action.deck))
-      const newState = {
+      return {
         ...state,
         ...action.deck
       }
-      console.log("ADD_DECK [new] ------ " + JSON.stringify(newState))
-      return newState
     default:
       return state
   }

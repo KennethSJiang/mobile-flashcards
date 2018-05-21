@@ -27,6 +27,5 @@ export function addDeck(deckId, title){
       }
     }
   }
-  console.log(`addDeck ${deckId}/${title}/${JSON.stringify(test)}`)
   return test
 }

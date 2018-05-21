@@ -26,7 +26,6 @@ class Quiz extends Component{
       answerWrong: prevState.answerWrong + 1,
       showQuestion: true
     }))
-    console.log(`After _incorrectSubmit state is ${JSON.stringify(this.state)}`)
   }
 
   _toogleQuestionAnswer = ()=>{
@@ -69,7 +68,7 @@ class Quiz extends Component{
             <Text style={styles.questionText}>
               Your Score:
             </Text>
-            <Text style={[styles.answerText, {fontSize: 30}]}>
+            <Text style={[styles.answerText, {fontSize: 50}]}>
               {questions.length === 0 ? 0 : (answerCorrect/questions.length * 100).toFixed(0)}%
             </Text>
             <Text style={[styles.answerText, {color: green, marginTop: 20}]}>

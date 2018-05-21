@@ -15,13 +15,11 @@ class DeckDetail extends Component{
 
   _addCard = (deckId) => {
     const { toNewCard } = this.props
-    console.log("_addcard has been called on " + deckId)
     toNewCard(deckId)
   }
 
   _startQuiz = (deckId) => {
     const { toQuiz } = this.props
-    console.log("_startQuiz has been called on " + deckId)
     toQuiz(deckId)
   }
 

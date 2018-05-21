@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title:{
+    marginTop: 40,
     fontSize: 40,
     textAlign: 'center',
   },
