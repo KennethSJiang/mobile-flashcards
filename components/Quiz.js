@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, StyleSheet } from 'react-native'
-import { red, white, green, gray, lightGray } from '../utils/colors'
-import TextButton from './TextButton'
+import Score from './Score'
+import Question from './Question'
 
 class Quiz extends Component{
   state = {
@@ -28,7 +27,7 @@ class Quiz extends Component{
     }))
   }
 
-  _toogleQuestionAnswer = ()=>{
+  _toggleQuestionAnswer = ()=>{
     this.setState((prevState) => ({
       showQuestion: !prevState.showQuestion
     }))
@@ -48,23 +47,6 @@ class Quiz extends Component{
     goBack()
   }
 
-  _questionAnswerText = (question, answer)=>{
-    const { showQuestion } = this.state
-    if(showQuestion){
-      return(
-        <Text style={styles.questionText}>
-          { question }
-        </Text>
-      )
-    } else {
-      return(
-        <Text style={styles.answerText}>
-          { answer }
-        </Text>
-      )
-    }
-  }
-
   render(){
     const { answerWrong, answerCorrect, currentQIndex, showQuestion } = this.state
     const { deck } = this.props
@@ -72,69 +54,28 @@ class Quiz extends Component{
 
     if(currentQIndex === questions.length){
       return(
-        <View style={styles.container}>
-          <View style={styles.question}>
-            <Text style={styles.questionText}>
-              Your Score:
-            </Text>
-            <Text style={[styles.answerText, {fontSize: 50}]}>
-              {questions.length === 0 ? 0 : (answerCorrect/questions.length * 100).toFixed(0)}%
-            </Text>
-            <Text style={[styles.answerText, {color: green, marginTop: 20}]}>
-              Correct Answer: {answerCorrect}
-            </Text>
-            <Text style={[styles.answerText, {color: red, marginTop: 20}]}>
-              Incorrect Answer: {answerWrong}
-            </Text>
-          </View>
-          <TextButton
-            style={[styles.textButton, {width: 200, marginTop: 40, backgroundColor: lightGray}]}
-            onPress={() => this._restart()}
-          >
-            Restart Quiz
-          </TextButton>
-          <TextButton
-            style={[styles.textButton, {width: 200, marginTop: 10}]}
-            onPress={() => this._goBack()}
-          >
-            Back to Deck
-          </TextButton>
-        </View>
+        <Score
+        answerWrong={answerWrong}
+        answerCorrect={answerCorrect}
+        totalQuestions={questions.length}
+        restart={()=>this._restart()}
+        goBack={()=>this._goBack()} />
       )
     } else {
       const { question, answer } = questions[currentQIndex]
       const questionPoolSize = questions ? questions.length : 0
+
       return(
-        <View style={styles.container}>
-          <View style={styles.tracker}>
-            <Text style={styles.trackerText}>
-              {questionPoolSize === 0 ? 0 : questionPoolSize - answerWrong - answerCorrect} / {questionPoolSize}
-            </Text>
-          </View>
-          <View style={styles.question}>
-            { this._questionAnswerText(question, answer) }
-            <TextButton
-              style={styles.questionAnswerToggle}
-              onPress={()=> this._toogleQuestionAnswer()}
-            >
-              { showQuestion ? 'Answer' : 'Question' }
-            </TextButton>
-          </View>
-          <View style={styles.answerAction}>
-            <TextButton
-              style={[{backgroundColor: green}, styles.answerButton]}
-              onPress={()=>this._correctSubmit()}
-            >
-              Correct
-            </TextButton>
-            <TextButton
-              style={[{backgroundColor: red}, styles.answerButton]}
-              onPress={()=>this._incorrectSubmit()}
-            >
-              Incorrect
-            </TextButton>
-          </View>
-        </View>
+        <Question
+          showQuestion={showQuestion}
+          question={question}
+          answer={answer}
+          totalQuestions={questionPoolSize}
+          totalAnswered={answerWrong + answerCorrect}
+          toggleQuestionAnswer={()=>this._toggleQuestionAnswer()}
+          correctSubmit={()=>this._correctSubmit()}
+          incorrectSubmit={()=>this._incorrectSubmit()}
+        />
       )
     }
   }
@@ -153,48 +94,5 @@ function mapDispatchToProps(dispatch, { navigation }){
     goBack: ()=> navigation.goBack()
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  tracker: {
-    alignSelf: 'flex-start',
-    margin: 10
-  },
-  trackerText: {
-    fontSize: 20,
-  },
-  question:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  questionText:{
-    fontSize: 35,
-    margin: 10,
-  },
-  answerText: {
-    fontSize: 35,
-    margin: 10,
-    color: gray,
-  },
-  questionAnswerToggle:{
-    fontSize: 20,
-    color: red,
-    borderWidth: 0,
-  },
-  answerAction:{
-    marginTop: 20
-  },
-  answerButton: {
-    width: 200,
-    fontSize: 20,
-    marginTop: 10,
-    color: white
-  },
-})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Quiz)
