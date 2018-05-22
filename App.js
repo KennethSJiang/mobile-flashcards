@@ -14,7 +14,7 @@ import Quiz from './components/Quiz'
 import { white, darkGray, black } from './utils/colors'
 import {createStackNavigator, createBottomTabNavigator, createMaterialTopTabNavigator} from 'react-navigation'
 import {FontAwesome, Ionicons} from '@expo/vector-icons'
-import {resetLocalNotification} from './utils/helpers'
+import {setLocalNotification} from './utils/helpers'
 
 function MyStatusBar({backgroundColor, ...props}){
     return(
@@ -131,7 +131,7 @@ const MainNavigator = createStackNavigator({
 
 export default class App extends React.Component {
   componentDidMount(){
-    resetLocalNotification()
+    setLocalNotification()
   }
 
   render() {

@@ -2,8 +2,13 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { gray, red, white, green, lightGray } from '../utils/colors'
 import TextButton from './TextButton'
+import {setLocalNotification, clearLocalNotification} from '../utils/helpers'
 
 class Score extends Component{
+  componentDidMount(){
+      clearLocalNotification().then(setLocalNotification())
+  }
+
   render(){
     const { answerWrong, answerCorrect, totalQuestions, restart, goBack } = this.props
 

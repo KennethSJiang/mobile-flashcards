@@ -1,5 +1,5 @@
 # Mobile Flashcards Project
-This is a mobile application built in ReactNative that allows users to study collections of flashcards. The app will allow users to create different categories of flashcards called "decks", add flashcards to those decks, then take quizzes on those decks. Last but not least, the app will send local notification on per daily basis to remind user to study the flashcards.
+This is a ReactNative mobile application built and tested to run on both Android and iOS operating systems. It allows users to study collections of flashcards. The app will allow users to create different categories of flashcards called "decks", add flashcards to those decks, then take quizzes on those decks. Last but not least, the app will send local notification on per daily basis to remind user to study the flashcards.
 
 * install all project dependencies with `npm install` or `yarn install`
 * start the development server with `npm start` or `yarn start`
@@ -19,6 +19,8 @@ This is a mobile application built in ReactNative that allows users to study col
     ├── NewDeck.js # Screen to add new Deck
     ├── Quiz.js # Component that manage quiz questions/answers and score
     ├── TextButton.js # helper component
+    ├── Question.js # question function view
+    ├── Score.js # score view
 ├── reducers # reducers for redux
     ├── decks.js # decks reducer
     ├── index.js # combined reducers
@@ -29,7 +31,7 @@ This is a mobile application built in ReactNative that allows users to study col
 ```
 
 ## Data
-Sample data is used as the baseline storage items. 
+Sample data is used as the baseline storage items.
 ```
 {
   React: {

@@ -1,5 +1,8 @@
 import React from 'react'
+import {AsyncStorage} from 'react-native'
 import { Notifications, Permissions} from 'expo'
+
+const NOTIFICATION_KEY = 'MobileFlashCard:notification'
 
 function _createLocalNotification(){
   return {
@@ -17,23 +20,39 @@ function _createLocalNotification(){
   }
 }
 
-export function resetLocalNotification(){
-  Permissions.askAsync(Permissions.NOTIFICATIONS)
-    .then(({status}) => {
-      if(status === 'granted'){
-        Notifications.cancelAllScheduledNotificationsAsync()
-        let tomorrow = new Date()
-        tomorrow.setDate(tomorrow.getDate() + 1)
-        tomorrow.setHours(20)
-        tomorrow.setMinutes(0)
+export function clearLocalNotification(){
+  return AsyncStorage.removeItem(NOTIFICATION_KEY)
+  .then(()=>{
+    Notifications.cancelAllScheduledNotificationsAsync()
+  })
+}
 
-        Notifications.scheduleLocalNotificationAsync(
-          _createLocalNotification(),
-          {
-            time: tomorrow,
-            repeat: 'day'
-          }
-        )
-      }
-    })
+export function setLocalNotification(){
+  AsyncStorage.getItem(NOTIFICATION_KEY)
+  .then(JSON.parse)
+  .then((data) => {
+    if(data === null){
+      Permissions.askAsync(Permissions.NOTIFICATIONS)
+      .then(({ status }) =>{
+        if(status === 'granted'){
+          Notifications.cancelAllScheduledNotificationsAsync()
+
+          let tomorrow = new Date()
+          tomorrow.setDate(tomorrow.getDate() + 1)
+          tomorrow.setHours(20)
+          tomorrow.setMinutes(0)
+
+          Notifications.scheduleLocalNotificationAsync(
+            _createLocalNotification(),
+            {
+              time: tomorrow,
+              repeat: 'day'
+            }
+          )
+
+          AsyncStorage.setItem(NOTIFICATION_KEY, JSON.stringify(true))
+        }
+      })
+    }
+  })
 }
